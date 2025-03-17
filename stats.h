@@ -21,8 +21,8 @@ typedef struct {
 } OPTIONS;
 
 extern OPTIONS Options;
-extern long total_node_count;
-extern long penscount, penmcount, deadscount, deadmcount;
+extern int32_t total_node_count;
+extern int32_t penscount, penmcount, deadscount, deadmcount;
 
 void IncNodeCount(int depth);
 

@@ -478,10 +478,10 @@ void NavigatorSetDeepest(MAZE *maze, int depth)
 	Fwrefresh(MyNavigator.deepest);
 }
 
-void NavigatorSetNodeCount(long total_node_count, long node_count)
+void NavigatorSetNodeCount(int32_t total_node_count, int32_t node_count)
 {
 	mvwprintw(MyNavigator.depth->window,0,0,
-		" total nodes: %10li, curr nodes: %10ld",
+		" total nodes: %10" PRIi32 ", curr nodes: %10" PRId32 "",
 		total_node_count, node_count);
 	Fwrefresh(MyNavigator.depth);
 }

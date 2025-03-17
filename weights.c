@@ -156,10 +156,16 @@ void GlobalDistWeights(MAZE *maze, PHYSID start)
 				s_curr[next_in] = curr+DirToDiff[dir];
 				s_weight[next_in] = weight+(tunnel?0:MANPEN);
 				s_from_dir[next_in++] = OppDir[dir];
+				if (next_in == ENDPATH) {
+					My_exit(1, "Maze too large for ENDPATH, recompile with larger ENDPATH!\n");
+				}
         		} else if (IsBitSetBS(maze->M[dir],curr)) {
 				s_curr[next_in] = curr+DirToDiff[dir];
 				s_weight[next_in] = weight+(tunnel?0:STONEPEN);
 				s_from_dir[next_in++] = OppDir[dir];
+				if (next_in == ENDPATH) {
+					My_exit(1, "Maze too large for ENDPATH, recompile with larger ENDPATH!\n");
+				}
 			}
 		}
 	}
@@ -349,7 +355,7 @@ void SetGoalWeights(MAZE *maze) {
  * and giving them the rank should give us a good priority order */
 	int    i,j,done, max;
 	WEIGHT curr_prior,last_prior;
-	long   weight[MAXGOALS], last_weight;
+	int32_t weight[MAXGOALS], last_weight;
 
 	for (j=0; j<maze->number_goals; j++) {
 		maze->goals[j].weight = 0;

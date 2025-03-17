@@ -1,8 +1,8 @@
 #CC = purify -freeze-on-error=yes -inuse-at-exit=yes gcc
 CC = gcc
 
-#OPT = -O2
-OPT = -O0 -m32
+OPT = -O2
+#OPT = -O0 -m32
 #OPT = -g
 #WARN = -Wall
 #INCLUDE = -I$(HOME)/iris4d/include
@@ -25,7 +25,7 @@ RRR = -DRRR
 
 #MACHINE = -DHOME
 
-OPTIONS = $(DEBUG) $(NAVI) $(GTV) $(DDB) $(RATIO) $(RRR)
+OPTIONS = $(PC) $(DEBUG) $(NAVI) $(GTV) $(DDB) $(RATIO) $(RRR)
 CFLAGS = $(OPT) $(WARN) $(INCLUDE) $(LIBDIRS) $(OPTIONS)
 
 ##########################################################

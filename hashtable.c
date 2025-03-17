@@ -59,12 +59,12 @@ void ClearHashTable(MAZE *maze)
 	HASHKEY    hashkey = maze->hashkey&HASHMASK&~1;
 	HASHENTRY *entry   = &(IdaInfo->HashTable[hashkey]);
 if( entry->lock == maze->hashkey ) {
-  SR(Debug(4,0,"ClearHashTable: %llx %llx\n",
+  SR(Debug(4,0,"ClearHashTable: %" PRIx64 " %" PRIx64 "\n",
 	   maze->hashkey, hashkey));
   memcpy( entry, entry + 1, sizeof( HASHENTRY ) );
 } else {
   hashkey++;
-  SR(Debug(4,0,"ClearHashTable: %llx %llx\n",
+  SR(Debug(4,0,"ClearHashTable: %" PRIx64 " %" PRIx64 "\n",
 	   maze->hashkey, hashkey));
   entry = &( IdaInfo->HashTable[ hashkey ] );
   entry->lock = 0;
@@ -86,7 +86,7 @@ int QualityCompare( HASHENTRY *entry, int down )
 }
 
 HASHENTRY *StoreHashTable(MAZE *maze, int g, int down, int min_h, 
-	MOVE bm, long tree_size, int dl, int pen, int back, int pathflag)
+	MOVE bm, int32_t tree_size, int dl, int pen, int back, int pathflag)
 {
 	HASHKEY    hashkey = maze->hashkey&HASHMASK&~1;
 	HASHENTRY *entry   = &(IdaInfo->HashTable[hashkey]);
@@ -100,7 +100,7 @@ if( QualityCompare( entry, down ) > 0 ) {
   memcpy( entry + 1, entry, sizeof( HASHENTRY ) );
 }
 
-	SR(Debug(4,0,"StoreHashTable: %llx %llx down: %i min_h: %i\n",
+	SR(Debug(4,0,"StoreHashTable: %" PRIx64 " %" PRIx64 " down: %i min_h: %i\n",
 		maze->hashkey, hashkey, down, min_h));
 	if (   entry->lock != 0
 	    && entry->lock != maze->hashkey) {
@@ -145,7 +145,7 @@ HASHENTRY *GetHashTable(MAZE *maze) {
 	HASHKEY hashkey = maze->hashkey&HASHMASK&~1;
 	HASHENTRY *entry = &IdaInfo->HashTable[ hashkey ];
 
-	SR(Debug(4,0,"  GetHashTable: %llx %llx down: %i min_h: %i\n",
+	SR(Debug(4,0,"  GetHashTable: %" PRIx64 " %" PRIx64 " down: %i min_h: %i\n",
 		maze->hashkey, hashkey, entry->down, entry->min_h));
 	IdaInfo->tt_reqs++;
 	if (Options.tt==0) return(NULL);
@@ -183,19 +183,19 @@ void PSClearHashTable(MAZE *maze)
   HASHKEY    hashkey = maze->hashkey&HASHMASK;
   HASHENTRY *entry   = &(IdaInfo->HashTable[hashkey]);
 
-  SR(Debug(4,0,"ClearHashTable: %llx %llx\n",
+  SR(Debug(4,0,"ClearHashTable: %" PRIx64 " %" PRIx64 "\n",
 	   maze->hashkey, hashkey));
   entry->lock = 0;
   entry->down =-1;
 }
 
 HASHENTRY *PSStoreHashTable(MAZE *maze, int g, int down, int min_h, 
-	MOVE bm, long tree_size, int dl, int pen, int back, int pathflag)
+	MOVE bm, int32_t tree_size, int dl, int pen, int back, int pathflag)
 {
 	HASHKEY    hashkey = maze->hashkey&HASHMASK;
 	HASHENTRY *entry   = &(IdaInfo->HashTable[hashkey]);
 
-	SR(Debug(4,0,"StoreHashTable: %llx %llx down: %i min_h: %i\n",
+	SR(Debug(4,0,"StoreHashTable: %" PRIx64 " %" PRIx64 " down: %i min_h: %i\n",
 		maze->hashkey, hashkey, down, min_h));
 	if (   entry->lock != 0
 	    && entry->lock != maze->hashkey) {
@@ -240,7 +240,7 @@ HASHENTRY *PSGetHashTable(MAZE *maze) {
 	HASHKEY hashkey = maze->hashkey&HASHMASK;
 	HASHENTRY *entry = &IdaInfo->HashTable[ hashkey ];
 
-	SR(Debug(4,0,"  GetHashTable: %llx %llx down: %i min_h: %i\n",
+	SR(Debug(4,0,"  GetHashTable: %" PRIx64 " %" PRIx64 " down: %i min_h: %i\n",
 		maze->hashkey, hashkey, entry->down, entry->min_h));
 	IdaInfo->tt_reqs++;
 	if (Options.tt==0) return(NULL);
@@ -276,7 +276,7 @@ HASHKEY UpdateHashKey( MAZE *maze, UNMOVE *move) {
 	return(maze->hashkey);
 }
 
-unsigned long RandomTable32[1792] = {
+uint32_t RandomTable32[1792] = {
 0x7462cdf7,0x47b7a5f6,0x1e232b82,0x42db26cd,0x03ce62c9,0x4e8e22d0,0x237f9bfc,0x12a384ef,
 0x7a25810b,0x52f3a8da,0x789478a6,0x2fbca201,0x29625d3d,0x08d86e94,0xeb2ee000,0xa87cf97c,
 0xeb4987df,0x92990981,0xdb8cfc8a,0x86a5090a,0x42e70d71,0x5751af18,0x1c93a4c4,0x5f1293d7,
@@ -511,6 +511,6 @@ void InitRandom()
 {
   int i;
 
-  for( i = 0; i < 1972; i++ )
-    ((unsigned long *)RandomTable)[ i ] = RandomTable32[ i ];
+  for( i = 0; i < 1792; i++ )
+    ((uint32_t *)RandomTable)[ i ] = RandomTable32[ i ];
 }

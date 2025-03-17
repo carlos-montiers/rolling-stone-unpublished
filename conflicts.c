@@ -57,7 +57,7 @@ if (pen>=ENDPATH) return(0);
 		IdaInfo->ThresholdInc   = 2;
 		result = DeadStartIda();
 	}
-	Mprintf( 0, "Researching the Conflict gave: %d, asked was %d (n: %ld), prior: %d\n",
+	Mprintf( 0, "Researching the Conflict gave: %d, asked was %d (n: %" PRId32 "), prior: %d\n",
 		result,pen,IdaInfo->node_count,penalty);
 	if (result<pen) Mprintf( 0, "SHIT+SHIT+SHIT+SHIT+SHIT+SHIT+SHIT+SHIT\n");
 	DelCopiedMaze(IdaInfo->IdaMaze);
@@ -81,8 +81,8 @@ void InitConflicts(CONFLICTS *c)
 	c->array_size_pentested  = 0;
 	c->pentested		 = NULL;
 
-	memset(c->penalty_hist,0,sizeof(long)*MAX_PENHIST);
-	memset(c->penalty_depth,0,sizeof(long)*MAX_DEPTH);
+	memset(c->penalty_hist,0,sizeof(int32_t)*MAX_PENHIST);
+	memset(c->penalty_depth,0,sizeof(int32_t)*MAX_DEPTH);
 }
 
 void DelConflicts(CONFLICTS *c)
@@ -425,12 +425,12 @@ void PrintConflicts(MAZE *maze, CONFLICTS *c)
 	Mprintf( 0, "penalty: count; ");
 	for (peni=0; peni<MAX_PENHIST; peni+=2) {
 		if (c->penalty_hist[peni]>0) 
-			Mprintf( 0, "%d:%ld, ", peni, c->penalty_hist[peni]);
+			Mprintf( 0, "%d:%" PRId32 ", ", peni, c->penalty_hist[peni]);
 	}
 	Mprintf( 0, "\ndepth: count; ");
 	for (peni=0; peni<MAX_DEPTH; peni++) {
 		if (c->penalty_depth[peni]>0) 
-			Mprintf( 0, "%d:%ld, ", peni, c->penalty_depth[peni]);
+			Mprintf( 0, "%d:%" PRId32 ", ", peni, c->penalty_depth[peni]);
 	}
 	Mprintf( 0, "\n");
 	maze->manpos = old_manpos;
@@ -595,7 +595,7 @@ if (peni != penalty) {
 	return(penalty);
 }
 
-#define BitType unsigned long
+#define BitType uint32_t
 #define BitSize (sizeof(BitType)*8)
 #define BitSet(bs,bitnumber)   		((bs)  |=  (((BitType)1)<<bitnumber))
 #define BitSet0(bs)	      		((bs)   =  0)
@@ -621,7 +621,7 @@ int BitNext(BitType bs)
     }
     return(-1);
 */
-    unsigned long x;
+    uint32_t x;
 
     if( (x = (bs & 0x000000ff)) )
 	    return( BitFirst[ x >> 0 ] + 0 );
@@ -806,7 +806,7 @@ ENDLOOP:
 /*
 peni = GetPenaltyOld(c, stones, manpos);
 if ( IdaInfo == &MainIdaInfo && peni != total_penalty && total_penalty < 2000 && peni < 2000 ) {
-        printf("Inc %d to %d at %ld\n", peni, total_penalty, total_node_count);
+        printf("Inc %d to %d at %" PRId32 "\n", peni, total_penalty, total_node_count);
         PrintBit2Maze(IdaInfo->IdaMaze,stones);
         for (i = 0; i<match_count; i++) {
             printf("%i gives %i\n", i, penalties[i]);

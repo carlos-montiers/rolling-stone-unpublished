@@ -26,12 +26,12 @@ int DeadIsGoalNode(int g)
    after finding that this is a deadlock, find the minimal set of
    stones belonging to a deadlock */
 int  DeadMove(MAZE *maze, HASHENTRY *entry, MOVE *last_move, 
-		int treedepth, int g, int *dlsearched, long effort)
+		int treedepth, int g, int *dlsearched, int32_t effort)
 {
 	BitString	visible,relevant;
 	PHYSID		pos;
 	IDA		idainfo,*old_idainfo;
-	long		node_count;
+	int32_t 	node_count;
 	int		result;
 	int		number_stones;
 	int		old_gm;
@@ -93,7 +93,7 @@ NavigatorSetPSMaze(IdaInfo->IdaMaze,visible,maze->stone);
 			DelCopiedMaze(IdaInfo->IdaMaze);
 			IdaInfo = old_idainfo;
 			SR(Debug(3,0,"DeadMove ## End search - DEAD (nodes:"));
-			SR(Debug(3,0," %li, stones: %i, result: %i)\n", 
+			SR(Debug(3,0," %" PRIi32 ", stones: %i, result: %i)\n",
 				node_count, number_stones, result));
 			Options.mc_gm=old_gm;
 NavigatorUnsetPSMaze();
@@ -128,7 +128,7 @@ NavigatorUnsetPSMaze();
 	dl_neg_nc += IdaInfo->node_count;
 	dl_neg_sc ++;
 	IdaInfo = old_idainfo;
-	SR(Debug(3,0,"DeadMove ## End search - ALIVE (nodes: %li stones: %i)\n",
+	SR(Debug(3,0,"DeadMove ## End search - ALIVE (nodes: %" PRIi32 " stones: %i)\n",
 		node_count,number_stones));
 	Options.mc_gm=old_gm;
 NavigatorUnsetPSMaze();
@@ -255,7 +255,7 @@ void DeadMiniConflict(BitString visible)
 {
 	int    result;
 	PHYSID pos;
-	long   node_count;
+	int32_t node_count;
 	BitString already;
 	int	  old_gm;
 	IDA	  idainfo,*old_idainfo;
@@ -380,7 +380,7 @@ int DeadStartIda() {
    ENDPATH there is no solution - deadlock */
 
 	int       result=ENDPATH;
-	long      last_tree_size;
+	int32_t   last_tree_size;
 
 	if (AbortSearch()) return(0);
 	/* initialize data structures */
@@ -471,8 +471,8 @@ int DeadIda(int treedepth, int g) {
 	HASHENTRY *entry;
 	MOVE       bestmove;
 	int 	   min_h,number_moves,result,i;
-	long	   tree_size_save;
-	long	   max_tree_size, tmp_tree_size;
+	int32_t    tree_size_save;
+	int32_t    max_tree_size, tmp_tree_size;
 	int        dir;
 
 
@@ -480,7 +480,7 @@ int DeadIda(int treedepth, int g) {
 	SR(int here_nodes = total_node_count);
 	SR(int old_h = IdaInfo->IdaMaze->h- IdaInfo->IdaMaze->pen);
 
-        SR(Debug(4,treedepth,"starting ida (h=%i) (%s) %li %llx\n",
+        SR(Debug(4,treedepth,"starting ida (h=%i) (%s) %" PRIi32 " %" PRIi64 "\n",
 		IdaInfo->IdaMaze->h,
           	treedepth==0?"a1a1"
 		      :PrintMove(IdaInfo->IdaArray[treedepth-1].currentmove),

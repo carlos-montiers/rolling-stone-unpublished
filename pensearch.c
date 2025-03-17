@@ -92,12 +92,12 @@ void FindFringeStones( MAZE *maze, BitString fs )
    after finding that this is a deadlock, find the minimal set of
    stones belonging to a deadlock */
 int  PenMove(MAZE *maze, HASHENTRY *entry, MOVE *last_move, int treedepth,
-	int g, int targetpen, int *pensearched, long effort)
+	int g, int targetpen, int *pensearched, int32_t effort)
 {
 	BitString	visible,relevant;
 	PHYSID		pos;
 	IDA		idainfo,*old_idainfo;
-	long		node_count;
+	int32_t 	node_count;
 	int		result;
 	int		number_stones;
 	int		old_gm;
@@ -206,7 +206,7 @@ PrintMaze( maze );
 		pen_neg_sc ++;
 	}
 	IdaInfo = old_idainfo;
-	SR(Debug(3,0,"PenMove ## End search - ALIVE (nodes: %li stones: %i)\n",
+	SR(Debug(3,0,"PenMove ## End search - ALIVE (nodes: %" PRIi32 " stones: %i)\n",
 		node_count,number_stones));
 	Options.mc_gm=old_gm;
 NavigatorUnsetPSMaze();
@@ -314,7 +314,7 @@ void PenMiniConflict(BitString visible, int penalty)
 {
 	int    result;
 	PHYSID pos;
-	long   node_count;
+	int32_t node_count;
 	BitString already;
 	int	  old_gm;
 	IDA	  idainfo,*old_idainfo;
@@ -401,7 +401,7 @@ void PenMiniConflict2(BitString visible, int penalty)
 {
 	int    result;
 	PHYSID pos;
-	long   node_count;
+	int32_t node_count;
 	BitString already;
 	int	  old_gm;
 	IDA	  idainfo,*old_idainfo;
@@ -458,7 +458,7 @@ int PenStartIda() {
    ENDPATH there is no solution - deadlock */
 
 	int       result=ENDPATH;
-	long      last_tree_size;
+	int32_t   last_tree_size;
 
 	if (AbortSearch()) return(0);
 	/* initialize data structures */
@@ -551,13 +551,13 @@ int PenIda(int treedepth, int g) {
 	HASHENTRY *entry;
 	MOVE       bestmove;
 	int 	   min_h,number_moves,result,i;
-	long	   tree_size_save;
-	long	   max_tree_size, tmp_tree_size;
+	int32_t    tree_size_save;
+	int32_t    max_tree_size, tmp_tree_size;
 	int        dir; 
 	SR(int here_nodes = total_node_count);
 	SR(int old_h = IdaInfo->IdaMaze->h- IdaInfo->IdaMaze->pen);
 
-        SR(Debug(4,treedepth,"starting ida (h=%i) (%s) %li %llx\n",
+        SR(Debug(4,treedepth,"starting ida (h=%i) (%s) %" PRIi32 " %" PRIx64 "\n",
 		IdaInfo->IdaMaze->h,
           	treedepth==0?"a1a1"
 		      :PrintMove(IdaInfo->IdaArray[treedepth-1].currentmove),

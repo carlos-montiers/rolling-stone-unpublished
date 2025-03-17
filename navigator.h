@@ -69,7 +69,7 @@ void NavigatorUnsetPSMaze();
 int  NavigatorPSConflict(MAZE *maze, int penalty, int index);
 void NavigatorPSNEWS(MAZE *maze, int dir);
 void NavigatorSetDeepest(MAZE *maze, int depth);
-void NavigatorSetNodeCount(long total_node_count, long node_count);
+void NavigatorSetNodeCount(int32_t total_node_count, int32_t node_count);
 void NavigatorSetDepth(char *msg);
 void NavigatorIncNodeCount(int dth);
 void NavigatorEndwin();

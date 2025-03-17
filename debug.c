@@ -11,7 +11,7 @@ void Mprintf( int priority, char *format, ... )
    	vsprintf( msg, format, argptr );
    	va_end( argptr );
 
-        printf( msg );		/* This is the only printf in the entire
+        printf( "%s", msg );	/* This is the only printf in the entire
 				 * program!!!!!! */
         fflush(stdout);
    }
@@ -63,7 +63,7 @@ void Debug( int level, int indent, char *format, ... )
       	xxx2[indent] = '\0';
       	Mprintf( level, ". %3d %s ", indent, xxx2);
       }
-      Mprintf( level, msg );
+      Mprintf( level, "%s", msg );
    }
 }
 

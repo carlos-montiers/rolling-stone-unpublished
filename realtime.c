@@ -5,7 +5,7 @@ static int compare_val(const void *m1, const void *m2) {
 }       
 
 
-int RealSearch(long effort)
+int RealSearch(int32_t effort)
 {
 /* This routine is searching a maze in "real"-time, meaning it commits every
  * max-nodes nodes of search to a move to make. The problem here is of course,
@@ -97,11 +97,11 @@ STUCK:
 	return(0);
 }
 
-short MoveValue(MAZE *maze, MOVE *move, long effort) {
+short MoveValue(MAZE *maze, MOVE *move, int32_t effort) {
 
 	short i;
 	int   result;
-	long  old_effort;
+	int32_t old_effort;
 	MAZE *old_maze;
 	UNMOVE unmove;
 

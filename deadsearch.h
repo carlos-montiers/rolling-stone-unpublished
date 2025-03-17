@@ -9,7 +9,7 @@ void DeadMiniConflict(BitString visible);
 
 int  DeadIsGoalNode();
 int  DeadMove(MAZE *maze, HASHENTRY *entry, MOVE *last_move, 
-		int treedepth, int g, int *dlsearched, long effort);
+		int treedepth, int g, int *dlsearched, int32_t effort);
 int  DeadStartIda();
 int  DeadIda(int treedepth, int g);
 int  DeadMakeMove(MAZE *maze, MOVE *move, UNMOVE *ret);

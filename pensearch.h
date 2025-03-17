@@ -5,7 +5,7 @@ void PenMiniConflict(BitString visible, int penalty);
 
 int  PenIsGoalNode(int g);
 int  PenMove(MAZE *maze, HASHENTRY *entry, MOVE *last_move, int treedepth,
-	int g, int targetpen, int *pensearched, long effort);
+	int g, int targetpen, int *pensearched, int32_t effort);
 void PenDeactivateStones(MAZE *maze, BitString visible);
 int  PenStartIda();
 int  PenIda(int treedepth, int g);

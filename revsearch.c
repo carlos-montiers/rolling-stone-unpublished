@@ -17,11 +17,11 @@ that was a deadlock or not will remain a deadlock or not. */
 since some non-reversible moves push stones towards goals. */
 
 int ReversibleMove(MAZE *maze, MOVE *last_move, int depth,
-		long effort, int force) 
+		int32_t effort, int force)
 {
 	BitString  old_visible,visible,diff;
 	IDA	   idainfo,*old_idainfo;
-	long       node_count;
+	int32_t    node_count;
 	int	   result;
 	OPTIONS    old_opt;
 
@@ -56,7 +56,7 @@ int ReversibleMove(MAZE *maze, MOVE *last_move, int depth,
 		if (Is0BS(IdaInfo->IdaManSquares) || result>=ENDPATH) {
 			DelCopiedMaze(IdaInfo->IdaMaze);
 			IdaInfo = old_idainfo;
-			Debug(4,0,"NOT ReversibleMove (n: %li, res: %i)\n",
+			Debug(4,0,"NOT ReversibleMove (n: %" PRIi32 ", res: %i)\n",
 				node_count, result);
 			Options = old_opt;
 			return(0);
@@ -80,7 +80,7 @@ int ReversibleMove(MAZE *maze, MOVE *last_move, int depth,
 	} while (!EqualBS(old_visible,visible));
 	DelCopiedMaze(IdaInfo->IdaMaze);
 	IdaInfo = old_idainfo;
-	Debug(4,0,"YES ReversibleMove (n: %li)\n", node_count);
+	Debug(4,0,"YES ReversibleMove (n: %" PRIi32 ")\n", node_count);
 	Options = old_opt;
 	return(1);
 }

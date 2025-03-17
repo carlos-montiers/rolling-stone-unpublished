@@ -390,7 +390,7 @@ int BackStartIda() {
 	   StartBackLowerBound() which is called by BackGoalsStones(). */
 
 	int       result=ENDPATH;
-	long      last_tree_size;
+	int32_t   last_tree_size;
 	PHYSID    pos;
 	MAZE	 *old_maze;
 
@@ -494,8 +494,8 @@ int BackIda(int treedepth, int g) {
 	HASHENTRY *entry;
 	MOVE       bestmove;
 	int 	   min_h,number_moves,result,i;
-	long	   tree_size_save;
-	long	   max_tree_size, tmp_tree_size;
+	int32_t    tree_size_save;
+	int32_t    max_tree_size, tmp_tree_size;
 	int old_h = IdaInfo->IdaMaze->h- IdaInfo->IdaMaze->pen;
 
         SR(Debug(4,treedepth,"starting ida (h=%i) (%s)\n",IdaInfo->IdaMaze->h,
@@ -629,7 +629,7 @@ void BackSetGoalWeights(MAZE *maze)
  * and giving them the rank should give us a good priority order */
 	int    i,j,done, max;
 	WEIGHT curr_prior,last_prior;
-	long   weight[MAXGOALS], last_weight;
+	int32_t weight[MAXGOALS], last_weight;
 
 	for (j=0; j<maze->number_goals; j++) {
 		maze->goals[j].weight = 0;

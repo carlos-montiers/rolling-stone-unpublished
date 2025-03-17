@@ -154,7 +154,7 @@ void PrintMaze(MAZE *maze) {
 						 maze->goals[x].weight);
 	}
 */
-	Mprintf( 0, "manpos: %i h: %i pen: %i search nodes: %li patterns: %d total nodes: %li\n",
+	Mprintf( 0, "manpos: %i h: %i pen: %i search nodes: %" PRIi32 " patterns: %d total nodes: %" PRIi32 "\n",
 		 maze->manpos,maze->h,maze->pen,
 		 IdaInfo->node_count,maze->conflicts->number_patterns,
 		 total_node_count );
@@ -348,7 +348,7 @@ END_INPUT:
 
 char *PrintMove(MOVE move) {
 
-	static char buff[20];
+	static char buff[32];
 
 	sprintf(buff,"%02i-%02i",move.from,move.to);
 	return(buff);

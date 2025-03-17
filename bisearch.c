@@ -9,7 +9,7 @@ int BidirectStartIda()
 
 
 	int       result=ENDPATH;
-	long      forw_node_count, back_node_count;
+	int32_t   forw_node_count, back_node_count;
 	PHYSID    pos;
 	MAZE     *forw_maze;
 	MAZE     *back_maze;

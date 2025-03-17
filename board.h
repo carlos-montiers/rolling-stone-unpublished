@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <curses.h>
+#include <inttypes.h>
 
 #define PATTERNSEARCH 10000
 #define PATTERNSTONES 12
@@ -46,7 +47,7 @@ extern int PATTERNRATIO;
 #define MAX_GROOMS      10
 #define MAX_LOCATIONS   30
 #define XY2ID(x,y)	(x*YSIZE+y)
-#define ENDPATH		2047
+#define ENDPATH		4095
 #ifdef SMALL
 /* XSIZE and YSIZE have to be different!!!! */
    #define XSIZE	23
@@ -55,16 +56,21 @@ extern int PATTERNRATIO;
    #define XSIZE 	25
    #define YSIZE 	20
 #endif
-#define BASETYPE   	long
-#define PRINTBASETYPE(a) Mprintf( 0, "%08lx",a);
+#define BASETYPE	uint32_t
+#define PRINTBASETYPE(a) Mprintf( 0, "%08" PRIx32,a);
 
 #define NUMBERBITS 	XSIZE*YSIZE
 #define BYTEPERINT 	sizeof(BASETYPE)
 #define NUMBERINTS 	(NUMBERBITS/(BYTEPERINT*8)+\
 				((NUMBERBITS%(BYTEPERINT*8))?1:0))
 
-#define         DL1PATHFILE "screens/DL.1"
-#define         DL2PATHFILE "screens/DL.2"
+#ifdef PC
+   #define DL1PATHFILE "screens/DL.1.pc"
+   #define DL2PATHFILE "screens/DL.2.pc"
+#else
+   #define DL1PATHFILE "screens/DL.1"
+   #define DL2PATHFILE "screens/DL.2"
+#endif
 
 
 #define min(a,b)	(((a)<(b))?a:b)
@@ -80,10 +86,10 @@ extern int PATTERNRATIO;
 
 #define CONFLICT_INC 10
 
-typedef unsigned short USHORT;
-typedef          short PHYSID;
-typedef unsigned short WEIGHT;
-typedef unsigned long long HASHKEY;
+typedef uint16_t USHORT;
+typedef  int16_t PHYSID;
+typedef uint16_t WEIGHT;
+typedef uint64_t HASHKEY;
 
 typedef struct {
 	int stoneidx;	/* referenced by goalidx */
@@ -165,7 +171,7 @@ typedef struct {
 	unsigned short backward:1;	/* this is a backward search entry */
 	unsigned short pathflag:1;	/* this is a flag indicating part
 					   of current path (== cycle)*/
-	long tree_size;
+	int32_t tree_size;
 /* TT GHI fix */
 /* int lastnonlmove; */
 } HASHENTRY;
@@ -279,8 +285,8 @@ typedef struct {
 	int	  array_size_pentested;
 	TESTED   *pentested;
 
-	long	  penalty_hist[MAX_PENHIST];
-	long	  penalty_depth[MAX_DEPTH];
+	int32_t   penalty_hist[MAX_PENHIST];
+	int32_t   penalty_depth[MAX_DEPTH];
 } CONFLICTS;
 
 typedef struct {
@@ -363,11 +369,11 @@ typedef struct {
 	int        Threshold;
 	int        ThresholdInc;
 	IDAARRAY   IdaArray[MAX_DEPTH];
-	long       AbortNodeCount;
+	int32_t    AbortNodeCount;
 	int        ForwDepthLimit;	/* primarily used for   */
 	int	   BackDepthLimit;	/* bidirectional search */
 	short      CurrentHashGen;
-	long	   last_tree_size;
+	int32_t    last_tree_size;
 	int        base_indent;
 	int	   MiniFlag;		/* set to YES in PenMiniConflict */
 
@@ -388,37 +394,37 @@ typedef struct {
 	BitString    no_reach;
 
 	/* stats stuff */
-	long       r_tree_size;	/* real number nodes searched this iteration */
-	long       v_tree_size;	/* virtual (including nodes saved by trnspsns */
-	long	   node_count;	/* number nodes search during this ida */
+	int32_t    r_tree_size; /* real number nodes searched this iteration */
+	int32_t    v_tree_size; /* virtual (including nodes saved by trnspsns */
+	int32_t    node_count;	/* number nodes search during this ida */
 				/* total_node_count is only reset when a
 				 * normal search is setup, therefore
 				 * contains ALL nodes searched (real) */
-	long       nodes_depth[MAX_DEPTH];
-	long       no_lcut_nodes[MAX_DEPTH];
-	long       no_lcut_moves[MAX_DEPTH];
-	long       no_lcut_h[MAX_DEPTH];
-	long       no_lcut_g[MAX_DEPTH];
-	long       lcut_nodes[MAX_DEPTH];
-	long       lcut_moves[MAX_DEPTH];
-	long       lcut_allmoves[MAX_DEPTH];
-	long       lcut_h[MAX_DEPTH];
-	long       lcut_g[MAX_DEPTH];
-	long       both_nodes[MAX_DEPTH];
-	long       both_moves[MAX_DEPTH];
-	long       both_h[MAX_DEPTH];
-	long       both_g[MAX_DEPTH];
+	int32_t    nodes_depth[MAX_DEPTH];
+	int32_t    no_lcut_nodes[MAX_DEPTH];
+	int32_t    no_lcut_moves[MAX_DEPTH];
+	int32_t    no_lcut_h[MAX_DEPTH];
+	int32_t    no_lcut_g[MAX_DEPTH];
+	int32_t    lcut_nodes[MAX_DEPTH];
+	int32_t    lcut_moves[MAX_DEPTH];
+	int32_t    lcut_allmoves[MAX_DEPTH];
+	int32_t    lcut_h[MAX_DEPTH];
+	int32_t    lcut_g[MAX_DEPTH];
+	int32_t    both_nodes[MAX_DEPTH];
+	int32_t    both_moves[MAX_DEPTH];
+	int32_t    both_h[MAX_DEPTH];
+	int32_t    both_g[MAX_DEPTH];
 	time_t     start_time;
 #ifdef STONEREACH
-  long reach_cuts;
+  int32_t reach_cuts;
 #endif
 	
-	long       tt_hits;
-	long       tt_cols;
-	long       tt_reqs;
-	long       gmtt_hits;
-	long       gmtt_cols;
-	long       gmtt_reqs;
+	int32_t    tt_hits;
+	int32_t    tt_cols;
+	int32_t    tt_reqs;
+	int32_t    gmtt_hits;
+	int32_t    gmtt_cols;
+	int32_t    gmtt_reqs;
 
 	int 	   PrintPriority;
 #ifdef STONEREACH
@@ -463,8 +469,10 @@ typedef struct {
 #include "stonereach.h"
 #include "priority.h"
 
+int StartRandom();
+
 extern int  PP;
-extern long dl_pos_nc, dl_neg_nc;	/* node counts for pos/neg searches */
+extern int32_t dl_pos_nc, dl_neg_nc;	/* node counts for pos/neg searches */
 extern int  dl_pos_sc, dl_neg_sc;	/* search count for pos/neg */
-extern long pen_pos_nc, pen_neg_nc;	/* node counts for pos/neg searches */
+extern int32_t pen_pos_nc, pen_neg_nc;	/* node counts for pos/neg searches */
 extern int  pen_pos_sc, pen_neg_sc;	/* search count for pos/neg */

@@ -14,7 +14,7 @@ int GenMoves( MAZE *maze, SMOVE *moves )
   num = 0;
   for( i = 0; i < maze->number_stones; i++ ) {
     pos = maze->stones[ i ].loc;
-    for( dir = 0; dir <= 4; dir++ ) {
+    for( dir = 0; dir < 4; dir++ ) {
       if( IsBitSetBS( maze->reach, pos - DirToDiff[ dir ] ) &&
 	  IsBitSetBS( maze->S[ dir ], pos ) &&
 	  maze->PHYSstone[ pos + DirToDiff[ dir ] ] < 0 ) {

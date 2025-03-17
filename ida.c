@@ -31,7 +31,7 @@ int StartIda(int nomacro) {
    ENDPATH there is no solution - deadlock */
 
 	int       result=ENDPATH;
-	long      last_tree_size;
+	int32_t   last_tree_size;
 	MAZE     *maze;
 	PHYSID    pos;
 	int       i, j;
@@ -170,8 +170,8 @@ printf("removing goal macro\n");
 #endif
 	PrintSolution();
 
-	printf( "pensearch nodes: %i( %i )\n", penscount, penmcount );
-	printf( "deadsearch nodes: %i( %i )\n", deadscount, deadmcount );
+	printf( "pensearch nodes: %" PRIi32 "( %" PRIi32 " )\n", penscount, penmcount );
+	printf( "deadsearch nodes: %" PRIi32 "( %" PRIi32 " )\n", deadscount, deadmcount );
 
 /* for( i = 0; i < XSIZE * YSIZE; i++ ) */
 /*   if( !IsBitSetBS( IdaInfo->IdaMaze->out, i ) && */
@@ -266,8 +266,8 @@ int Ida(int treedepth, int g, int prev_pen) {
 	HASHKEY    h;
 	MOVE       bestmove;
 	int 	   min_h,result,i;
-	long	   tree_size_save;
-	long	   max_tree_size, tmp_tree_size;
+	int32_t    tree_size_save;
+	int32_t    max_tree_size, tmp_tree_size;
 	int        dir,cut,old_IsLocalCut;
 int cutttl = 0;
 	int	   targetpen;

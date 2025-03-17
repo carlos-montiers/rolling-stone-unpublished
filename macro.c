@@ -771,7 +771,7 @@ int StartBuildGMTree(MAZE *start_maze, GROOM *groom) {
 	maze->number_stones=0;
 
 	start_maze->gmtrees[groom->index] = BuildGMTree(0,groom);
-	Debug(0,0,"%s MACRO, nodes: %li n: %i\n",
+	Debug(0,0,"%s MACRO, nodes: %" PRIi32 " n: %i\n",
 		(start_maze->gmtrees[groom->index] != NULL)?"YES":"NO",
 		IdaInfo->node_count,groom->n);
 	IdaInfo = old_idainfo;

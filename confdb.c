@@ -371,7 +371,10 @@ void DumpConflicts( MAZE *maze, CONFLICTS *c )
       exit( -1 );
     }
     fseek( file, 0, SEEK_SET );
-    fread( _db, _dbused, 1, file );
+    if( fread( _db, _dbused, 1, file ) != 1 ) {
+      perror( "could not read database" );
+      exit( -1 );
+    }
     _dbused /= sizeof( dbentry );
   }
   _dbsize = _dbused;
@@ -582,7 +585,10 @@ void LoadConflicts( MAZE *maze, CONFLICTS *c )
       exit( -1 );
     }
     fseek( file, 0, SEEK_SET );
-    fread( _db, _dbused, 1, file );
+    if( fread( _db, _dbused, 1, file ) != 1 ) {
+      perror( "could not read database" );
+      exit( -1 );
+    }
     _dbused /= sizeof( dbentry );
   }
   _dbsize = _dbused;

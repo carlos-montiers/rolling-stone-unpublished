@@ -2,15 +2,15 @@
 
 OPTIONS Options;
 
-long total_node_count = 0;
-long penscount, penmcount, deadscount, deadmcount;
-long pattern_counter[256];
+int32_t total_node_count = 0;
+int32_t penscount, penmcount, deadscount, deadmcount;
+int32_t pattern_counter[256];
 
 char *CreateStringDepth(short numberinfo)
 /* Create a string that represents the nodes at certain dpeths in the tree */
 {
 	static char msg[4000];
-	static char depth[10], nn[10];
+	static char depth[16], nn[32];
 	char   *cp;
 	int    d;
 
@@ -24,7 +24,7 @@ char *CreateStringDepth(short numberinfo)
 			IdaInfo->IdaArray[d].currentindex+1,
 			IdaInfo->IdaArray[d].number_moves);
 		else nn[0] = '\0';
-		sprintf(cp,"%s%ld%s ",depth,IdaInfo->nodes_depth[d],nn);
+		sprintf(cp,"%s%" PRId32 "%s ",depth,IdaInfo->nodes_depth[d],nn);
 		cp = msg + strlen(msg);
 		d++;
 	}
@@ -43,7 +43,7 @@ void IncNodeCount(int dth) {
 	if (total_node_count%100000==0) {
 		fp = fopen("nodecount","w");
 		if (fp != NULL) {
-			fprintf(fp,"%li",total_node_count);
+			fprintf(fp,"%" PRIi32,total_node_count);
 			fclose(fp);
 		}
 	}
@@ -119,9 +119,9 @@ void print_stats(int pri) {
 	Debug(pri,0, "lb_mp: %c, lb_cf: %c, mc_tu: %c, mc_gm: %c\n",
 		Options.lb_mp==1?'Y':'N', Options.lb_cf==1?'Y':'N', 
 		Options.mc_tu==1?'Y':'N', Options.mc_gm==1?'Y':'N');
-	Debug(pri,0,"nodes searched: total: %li, top level: %li\n",
+	Debug(pri,0,"nodes searched: total: %" PRIi32 ", top level: %" PRIi32 "\n",
 		total_node_count, IdaInfo->node_count);
-	Debug(pri,0,"TT hits: %li, TT collisions: %li Req: %li, (%f)\n",
+	Debug(pri,0,"TT hits: %" PRIi32 ", TT collisions: %" PRIi32 " Req: %" PRIi32 ", (%f)\n",
 		IdaInfo->tt_hits,
 		IdaInfo->tt_cols,
 		IdaInfo->tt_reqs,
@@ -130,136 +130,136 @@ void print_stats(int pri) {
 		Mprintf( 0, "nodes:");
 	i = ttl = 0;
 	while (IdaInfo->nodes_depth[i] && IdaInfo->PrintPriority >= pri)  {
-		Mprintf( 0, " %li", IdaInfo->nodes_depth[i]);
+		Mprintf( 0, " %" PRIi32, IdaInfo->nodes_depth[i]);
 		ttl += IdaInfo->nodes_depth[i];
 		i++;
 	}
 	if (IdaInfo->PrintPriority >= pri)
-		Mprintf( 0, ":%li\nno_lcut_nodes:",ttl);
+		Mprintf( 0, ":%" PRIi32 "\nno_lcut_nodes:",ttl);
 	i = ttl = 0;
 	while (IdaInfo->nodes_depth[i] && IdaInfo->PrintPriority >= pri)  {
-		Mprintf( 0, " %li", IdaInfo->no_lcut_nodes[i]);
+		Mprintf( 0, " %" PRIi32, IdaInfo->no_lcut_nodes[i]);
 		ttl += IdaInfo->no_lcut_nodes[i];
 		i++;
 	}
 	if (IdaInfo->PrintPriority >= pri)
-		Mprintf( 0, ":%li\nno_lcut_moves:",ttl);
+		Mprintf( 0, ":%" PRIi32 "\nno_lcut_moves:",ttl);
 	i = ttl = 0;
 	while (IdaInfo->nodes_depth[i] && IdaInfo->PrintPriority >= pri)  {
-		Mprintf( 0, " %li", IdaInfo->no_lcut_moves[i]);
+		Mprintf( 0, " %" PRIi32, IdaInfo->no_lcut_moves[i]);
 		ttl += IdaInfo->no_lcut_moves[i];
 		i++;
 	}
 	if (IdaInfo->PrintPriority >= pri)
-		Mprintf( 0, ":%li\nno_lcut_h:",ttl);
+		Mprintf( 0, ":%" PRIi32 "\nno_lcut_h:",ttl);
 	i = ttl = 0;
 	while (IdaInfo->nodes_depth[i] && IdaInfo->PrintPriority >= pri)  {
-		Mprintf( 0, " %li", IdaInfo->no_lcut_h[i]);
+		Mprintf( 0, " %" PRIi32, IdaInfo->no_lcut_h[i]);
 		ttl += IdaInfo->no_lcut_h[i];
 		i++;
 	}
 	if (IdaInfo->PrintPriority >= pri)
-		Mprintf( 0, ":%li\nno_lcut_g:",ttl);
+		Mprintf( 0, ":%" PRIi32 "\nno_lcut_g:",ttl);
 	i = ttl = 0;
 	while (IdaInfo->nodes_depth[i] && IdaInfo->PrintPriority >= pri)  {
-		Mprintf( 0, " %li", IdaInfo->no_lcut_g[i]);
+		Mprintf( 0, " %" PRIi32, IdaInfo->no_lcut_g[i]);
 		ttl += IdaInfo->no_lcut_g[i];
 		i++;
 	}
 	if (IdaInfo->PrintPriority >= pri)
-		Mprintf( 0, ":%li\nlcut_nodes:",ttl);
+		Mprintf( 0, ":%" PRIi32 "\nlcut_nodes:",ttl);
 	i = ttl = 0;
 	while (IdaInfo->nodes_depth[i] && IdaInfo->PrintPriority >= pri)  {
-		Mprintf( 0, " %li", IdaInfo->lcut_nodes[i]);
+		Mprintf( 0, " %" PRIi32, IdaInfo->lcut_nodes[i]);
 		ttl += IdaInfo->lcut_nodes[i];
 		i++;
 	}
 	if (IdaInfo->PrintPriority >= pri)
-		Mprintf( 0, ":%li\nlcut_moves:",ttl);
+		Mprintf( 0, ":%" PRIi32 "\nlcut_moves:",ttl);
 	i = ttl = 0;
 	while (IdaInfo->nodes_depth[i] && IdaInfo->PrintPriority >= pri)  {
-		Mprintf( 0, " %li", IdaInfo->lcut_moves[i]);
+		Mprintf( 0, " %" PRIi32, IdaInfo->lcut_moves[i]);
 		ttl += IdaInfo->lcut_moves[i];
 		i++;
 	}
 	if (IdaInfo->PrintPriority >= pri)
-		Mprintf( 0, ":%li\nlcut_h:",ttl);
+		Mprintf( 0, ":%" PRIi32 "\nlcut_h:",ttl);
 	i = ttl = 0;
 	while (IdaInfo->nodes_depth[i] && IdaInfo->PrintPriority >= pri)  {
-		Mprintf( 0, " %li", IdaInfo->lcut_h[i]);
+		Mprintf( 0, " %" PRIi32, IdaInfo->lcut_h[i]);
 		ttl += IdaInfo->lcut_h[i];
 		i++;
 	}
 	if (IdaInfo->PrintPriority >= pri)
-		Mprintf( 0, ":%li\nlcut_g:",ttl);
+		Mprintf( 0, ":%" PRIi32 "\nlcut_g:",ttl);
 	i = ttl = 0;
 	while (IdaInfo->nodes_depth[i] && IdaInfo->PrintPriority >= pri)  {
-		Mprintf( 0, " %li", IdaInfo->lcut_g[i]);
+		Mprintf( 0, " %" PRIi32, IdaInfo->lcut_g[i]);
 		ttl += IdaInfo->lcut_g[i];
 		i++;
 	}
 	if (IdaInfo->PrintPriority >= pri)
-		Mprintf( 0, ":%li\nlcut_allmoves:",ttl);
+		Mprintf( 0, ":%" PRIi32 "\nlcut_allmoves:",ttl);
 	i = ttl = 0;
 	while (IdaInfo->nodes_depth[i] && IdaInfo->PrintPriority >= pri)  {
-		Mprintf( 0, " %li", IdaInfo->lcut_allmoves[i]);
+		Mprintf( 0, " %" PRIi32, IdaInfo->lcut_allmoves[i]);
 		ttl += IdaInfo->lcut_allmoves[i];
 		i++;
 	}
 	if (IdaInfo->PrintPriority >= pri)
-		Mprintf( 0, ":%li\nboth_nodes:",ttl);
+		Mprintf( 0, ":%" PRIi32 "\nboth_nodes:",ttl);
 	i = ttl = 0;
 	while (IdaInfo->nodes_depth[i] && IdaInfo->PrintPriority >= pri)  {
-		Mprintf( 0, " %li", IdaInfo->both_nodes[i]);
+		Mprintf( 0, " %" PRIi32, IdaInfo->both_nodes[i]);
 		ttl += IdaInfo->both_nodes[i];
 		i++;
 	}
 	if (IdaInfo->PrintPriority >= pri)
-		Mprintf( 0, ":%li\nboth_moves:",ttl);
+		Mprintf( 0, ":%" PRIi32 "\nboth_moves:",ttl);
 	i = ttl = 0;
 	while (IdaInfo->nodes_depth[i] && IdaInfo->PrintPriority >= pri)  {
-		Mprintf( 0, " %li", IdaInfo->both_moves[i]);
+		Mprintf( 0, " %" PRIi32, IdaInfo->both_moves[i]);
 		ttl += IdaInfo->both_moves[i];
 		i++;
 	}
 	if (IdaInfo->PrintPriority >= pri)
-		Mprintf( 0, ":%li\nboth_h:",ttl);
+		Mprintf( 0, ":%" PRIi32 "\nboth_h:",ttl);
 	i = ttl = 0;
 	while (IdaInfo->nodes_depth[i] && IdaInfo->PrintPriority >= pri)  {
-		Mprintf( 0, " %li", IdaInfo->both_h[i]);
+		Mprintf( 0, " %" PRIi32, IdaInfo->both_h[i]);
 		ttl += IdaInfo->both_h[i];
 		i++;
 	}
 	if (IdaInfo->PrintPriority >= pri)
-		Mprintf( 0, ":%li\nboth_g:",ttl);
+		Mprintf( 0, ":%" PRIi32 "\nboth_g:",ttl);
 	i = ttl = 0;
 	while (IdaInfo->nodes_depth[i] && IdaInfo->PrintPriority >= pri)  {
-		Mprintf( 0, " %li", IdaInfo->both_g[i]);
+		Mprintf( 0, " %" PRIi32, IdaInfo->both_g[i]);
 		ttl += IdaInfo->both_g[i];
 		i++;
 	}
 	if (IdaInfo->PrintPriority >= pri)
-		Mprintf( 0, ":%li\n",ttl);
+		Mprintf( 0, ":%" PRIi32 "\n",ttl);
 	t = time(NULL) - IdaInfo->start_time;
 	if (t==0) t=1;
 	Debug(pri,0,"Nodes per Second: %8.0f\n",(float)total_node_count/t);
 	Debug(pri,0,"DeadMove search stats:\n");
-	Debug(pri,0,"DL POS: #: %3i (%2i%%) #n: %6li  nodes/search: %3i\n",
+	Debug(pri,0,"DL POS: #: %5i (%2i%%) #n: %8" PRIi32 "  nodes/search: %5i\n",
 		  dl_pos_sc,
 		  (int)(100*dl_pos_sc)/
 		       (dl_pos_sc+dl_neg_sc+(dl_pos_sc+dl_neg_sc==0?1:0)),
 		  dl_pos_nc,(dl_pos_sc==0)?0:(int)dl_pos_nc/dl_pos_sc);
-	Debug(pri,0,"DL NEG: #: %3i (%2i%%) #n: %6li  nodes/search: %3i\n",
+	Debug(pri,0,"DL NEG: #: %5i (%2i%%) #n: %8" PRIi32 "  nodes/search: %5i\n",
 		  dl_neg_sc,
 		  (int)(100*dl_neg_sc)/
 		       (dl_pos_sc+dl_neg_sc+(dl_pos_sc+dl_neg_sc==0?1:0)),
 		  dl_neg_nc,(dl_neg_sc==0)?0:(int)dl_neg_nc/dl_neg_sc);
-	Debug(pri,0,"PEN POS: #: %3i (%2i%%) #n: %6li  nodes/search: %3i\n",
+	Debug(pri,0,"PEN POS: #: %5i (%2i%%) #n: %8" PRIi32 "  nodes/search: %5i\n",
 		  pen_pos_sc,
 		  (int)(100*pen_pos_sc)/
 		       (pen_pos_sc+pen_neg_sc+(pen_pos_sc+pen_neg_sc==0?1:0)),
 		  pen_pos_nc,(pen_pos_sc==0)?0:(int)pen_pos_nc/pen_pos_sc);
-	Debug(pri,0,"PEN NEG: #: %3i (%2i%%) #n: %6li  nodes/search: %3i\n",
+	Debug(pri,0,"PEN NEG: #: %5i (%2i%%) #n: %8" PRIi32 "  nodes/search: %5i\n",
 		  pen_neg_sc,
 		  (int)(100*pen_neg_sc)/
 		       (pen_pos_sc+pen_neg_sc+(pen_pos_sc+pen_neg_sc==0?1:0)),
@@ -298,7 +298,7 @@ void CountPatterns()
 	int i=0;
 	int index;
 
-	for (index=0; index<=256; index++) 
+	for (index=0; index<256; index++)
 		if (pattern_counter[index]>0) {
 			i++;
 		}
@@ -309,5 +309,5 @@ void InitPatterns()
 {
 	int index;
 
-	for (index=0; index<=256; index++) pattern_counter[index]=0;
+	for (index=0; index<256; index++) pattern_counter[index]=0;
 }
