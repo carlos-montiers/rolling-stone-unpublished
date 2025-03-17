@@ -40,12 +40,15 @@ int StartIda(int nomacro) {
 #endif
 #ifdef RRR
 	int CurrAbort, prev_patt;
+	int save_count;
+	int trialnum;
 
 	CurrAbort = IdaInfo->AbortNodeCount;
 	IdaInfo->AbortNodeCount = MAGICNUMBER;
 	PATTERNRATIO += 3;
 	prev_patt = 0;
 	save_count = 0;
+	trialnum = 0;
 #endif
 
 for( i = 0; i < XSIZE * YSIZE; i++ )

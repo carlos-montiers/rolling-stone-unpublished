@@ -1,7 +1,8 @@
 #CC = purify -freeze-on-error=yes -inuse-at-exit=yes gcc
-CC = cc
+CC = gcc
 
-OPT = -O2
+#OPT = -O2
+OPT = -O0 -m32
 #OPT = -g
 #WARN = -Wall
 #INCLUDE = -I$(HOME)/iris4d/include
@@ -10,13 +11,17 @@ OPT = -O2
 #LIB = -lncurses -ltermcap 
 #LIB = -lm
 
+PC = -DPC
+
+
+
 
 #DEBUG = -DDEBUG
 #NAVI = -DNAVIGATOR
 #GTV = -DGTV
 #DDB = -DDYNAMICDB
 RATIO = -DRATIO
-#RRR = -DRRR
+RRR = -DRRR
 
 #MACHINE = -DHOME
 
